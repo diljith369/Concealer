@@ -1,0 +1,9 @@
+D:\AlphaBits\Concealer2.0.1\obj\Release\ConcealerNew.ConcealerForm.resources
+D:\AlphaBits\Concealer2.0.1\obj\Release\ConcealerNew.ConcealerSplash.resources
+D:\AlphaBits\Concealer2.0.1\obj\Release\Concealer.csproj.GenerateResource.Cache
+D:\AlphaBits\Concealer2.0.1\obj\Release\Concealer.Properties.Resources.resources
+D:\AlphaBits\Concealer2.0.1\bin\Release\Concealer.exe.config
+D:\AlphaBits\Concealer2.0.1\bin\Release\Concealer.exe
+D:\AlphaBits\Concealer2.0.1\bin\Release\Concealer.pdb
+D:\AlphaBits\Concealer2.0.1\obj\Release\Concealer.exe
+D:\AlphaBits\Concealer2.0.1\obj\Release\Concealer.pdb
